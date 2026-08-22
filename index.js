@@ -72,15 +72,7 @@ function parseResponse(raw) {
   let statusCode = null;
   let statusText = null;
   let body = raw;
-
-  /*
-   * curl -i produces something like:
-   *
-   * HTTP/1.1 200 OK
-   * content-type: application/json
-   *
-   * {"hello":"world"}
-   */
+  let headers = [];
 
   const statusMatch = raw.match(
     /^HTTP\/(?:1\.[01]|2)\s+(\d{3})\s+([^\r\n]+)/
@@ -90,12 +82,32 @@ function parseResponse(raw) {
     statusCode = Number(statusMatch[1]);
     statusText = statusMatch[2].trim();
 
-    // Remove HTTP headers
-    const separator = raw.search(/\r?\n\r?\n/);
+    const separatorMatch = raw.match(/\r?\n\r?\n/);
 
-    if (separator !== -1) {
+    if (separatorMatch) {
+      const separatorIndex = separatorMatch.index;
+
+      // Everything between status line and blank line = headers
+      const headerText = raw.slice(
+        statusMatch[0].length,
+        separatorIndex
+      ).trim();
+
+      headers = headerText
+        .split(/\r?\n/)
+        .filter(line => line.includes(":"))
+        .map(line => {
+          const index = line.indexOf(":");
+
+          return {
+            key: line.slice(0, index).trim(),
+            value: line.slice(index + 1).trim()
+          };
+        });
+
+      // Everything after blank line = body
       body = raw.slice(
-        separator + raw.match(/\r?\n\r?\n/)[0].length
+        separatorIndex + separatorMatch[0].length
       );
     }
   }
@@ -103,10 +115,10 @@ function parseResponse(raw) {
   return {
     statusCode,
     statusText,
+    headers,
     body: body.trim()
   };
 }
-
 function printHeader(response) {
   console.log();
 
@@ -129,15 +141,33 @@ function printHeader(response) {
     console.log(
       `${DIM}${response.statusText}${RESET}`
     );
+  }
+
+  // Show headers only when available
+  if (response.headers && response.headers.length > 0) {
+    console.log();
+
+    console.log(
+      `${BOLD}${COLORS.blue}Headers${RESET}`
+    );
 
     console.log(
       `${COLORS.gray}────────────────────────────────────────${RESET}`
     );
+
+    for (const header of response.headers) {
+      console.log(
+        `${BOLD}${COLORS.cyan}${header.key}${RESET}: ${COLORS.white}${header.value}${RESET}`
+      );
+    }
   }
+
+  console.log(
+    `${COLORS.gray}────────────────────────────────────────${RESET}`
+  );
 
   console.log();
 }
-
 function getStatusColor(code) {
   if (code >= 200 && code < 300) return COLORS.green;
   if (code >= 300 && code < 400) return COLORS.yellow;
