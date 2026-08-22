@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "A beautiful terminal viewer for HTTP responses",
   "bin": {
-    "dark": "./bin/main.js"
+    "dark": "./main.js"
   },
   "type": "module"
 }
