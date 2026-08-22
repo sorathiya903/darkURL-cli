@@ -1,9 +1,59 @@
 {
   "name": "darkurl-cli",
-  "version": "0.0.2",
-  "description": "A beautiful terminal viewer for HTTP responses",
+  "description": "A beautiful interactive terminal viewer for HTTP responses, JSON, headers, and curl output.",
+  "author": {
+    "name": "Aditya Sorathiya"
+  },
+  "version": "0.0.5",
   "bin": {
     "dark": "./bin/main.js"
   },
-  "type": "module"
+  "type": "module",
+  "keywords": [
+    "darkurl",
+    "darkurl-cli",
+    "dark",
+    "curl",
+    "curl-output",
+    "http",
+    "http-client",
+    "http-response",
+    "http-response-viewer",
+    "api",
+    "api-client",
+    "api-testing",
+    "rest",
+    "rest-api",
+    "json",
+    "json-viewer",
+    "json-formatter",
+    "json-pretty",
+    "terminal",
+    "cli",
+    "command-line",
+    "developer-tools",
+    "developer-tool",
+    "http-debugging",
+    "api-debugging",
+    "response-viewer"
+  ],
+  "files": [
+    "index.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sorathiya903/darkURL-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sorathiya903/darkURL-cli/issues"
+  },
+  
+  "scripts": {
+    "start": "node index.js"
+  }
 }
