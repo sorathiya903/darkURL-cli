@@ -4,6 +4,7 @@
   "author": {
     "name": "Aditya Sorathiya"
   },
+  "license": "MIT",
   "version": "0.0.5",
   "bin": {
     "dark": "./bin/main.js"
